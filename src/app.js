@@ -3,41 +3,45 @@ const bodyparser = require('koa-bodyparser');
 const logger = require('koa-logger');
 
 const routeMiddleware = require('./middleware/router');
+const rspt2json = require('./middleware/rspt2json')
 
 class Server {
-  constructor(options) {
-    this.port = options.port;
+    constructor(options) {
+        this.port = options.port;
 
-    this._init();
-  }
+        this._init();
+    }
 
-  _init() {
-    this.app = new Koa();
-    this._middlewareMount();
-  }
+    _init() {
+        this.app = new Koa();
+        this._middlewareMount();
+    }
 
-  _middlewareMount() {
-    this.app.use(bodyparser());
-    this.app.use(logger());
+    _middlewareMount() {
+        this.app.use(rspt2json);
 
-    routeMiddleware.forEach(middleware => {
-      this.app.use(middleware);
-    });
-  }
+        this.app.use(bodyparser());
+        this.app.use(logger());
 
-  start() {
-    this.server = this.app.listen(this.port, (err) => {
-      if (err) {
-        console.log('server start error: ', err);
-      } else {
-        console.log(`server start with port ${this.port}`);
-      }
-    });
-  }
 
-  close() {
-    this.server && this.server.close();
-  }
+        routeMiddleware.forEach(middleware => {
+            this.app.use(middleware);
+        });
+    }
+
+    start() {
+        this.server = this.app.listen(this.port, (err) => {
+            if (err) {
+                console.log('server start error: ', err);
+            } else {
+                console.log(`server start with port ${this.port}`);
+            }
+        });
+    }
+
+    close() {
+        this.server && this.server.close();
+    }
 }
 
 
