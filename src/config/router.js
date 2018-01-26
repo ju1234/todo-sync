@@ -4,13 +4,14 @@ module.exports = {
         action: 'test/test.id.js'
     },
     // '/userinfo': 'userInfo.js',
-    'push': {
+    'push/:id': {
         method: 'post',
         action: 'todo/push.js'
     },
-    'pull': {
-        method: ['post', 'options'],
+    'pull/:id': {
+        method: 'get',
         action: 'todo/pull.js'
     },
+    'heartbeat': 'todo/heartbeat',
     'list/:id': 'list'
 };

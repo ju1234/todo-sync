@@ -33,7 +33,12 @@ Object.keys(routerList).map(route => {
     routesMounte(method, route, getActionPath(action));
 });
 
-
+/**
+ * 路由挂载
+ * @param method
+ * @param route
+ * @param actionPath
+ */
 function routesMounte(method, route, actionPath) {
     try {
         fs.statSync(actionPath);
@@ -53,7 +58,11 @@ function routesMounte(method, route, actionPath) {
     console.log(`${route} has been mounted`);
 }
 
-// 获取action地址
+/**
+ * 接口处理文件路劲拼接
+ * @param action
+ * @returns {*}
+ */
 function getActionPath(action) {
     if (!/\.js/.test(action)) {
         action = action + '.js';
@@ -61,6 +70,10 @@ function getActionPath(action) {
     return path.join(__dirname, '../router', action);
 }
 
+/**
+ *
+ * @param method
+ */
 function methodValidate(method) {
     const result = ['get', 'post', 'put', 'options', 'head', 'delete', 'trace', 'connect'].some(item => {
         if(Array.isArray(method)){
