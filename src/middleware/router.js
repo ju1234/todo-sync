@@ -23,7 +23,6 @@ Object.keys(routerList).map(route => {
         if (!options.method) {
             method = 'get';
         } else {
-            methodValidate(options.method);
             method = options.method;
         }
         action = options.action;
@@ -31,7 +30,7 @@ Object.keys(routerList).map(route => {
         throw new Error('route options must be string or object');
     }
 
-    routesMounte(method.toLowerCase(), route, getActionPath(action));
+    routesMounte(method, route, getActionPath(action));
 });
 
 
@@ -41,9 +40,16 @@ function routesMounte(method, route, actionPath) {
     } catch (err) {
         console.error(`no such file or directory, stat '${actionPath}'`);
     }
+    methodValidate(method);
 
     route = path.join(prefix, route);
-    router[method](route, require(actionPath));
+    if(Array.isArray(method)){
+        method.map( m => {
+            router[m.toLowerCase()](route, require(actionPath));
+        })
+    }else {
+        router[method.toLowerCase()](route, require(actionPath));
+    }
     console.log(`${route} has been mounted`);
 }
 
@@ -57,6 +63,9 @@ function getActionPath(action) {
 
 function methodValidate(method) {
     const result = ['get', 'post', 'put', 'options', 'head', 'delete', 'trace', 'connect'].some(item => {
+        if(Array.isArray(method)){
+            return method.some(m => (new RegExp(item, 'i')).test(m))
+        }
         return (new RegExp(item, 'i')).test(method);
     });
 

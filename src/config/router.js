@@ -3,9 +3,14 @@ module.exports = {
         method: 'get',
         action: 'test/test.id.js'
     },
-    '/userinfo': 'userInfo.js',
-    'upload': {
+    // '/userinfo': 'userInfo.js',
+    'push': {
         method: 'post',
-        action: 'upload.js'
-    }
+        action: 'todo/push.js'
+    },
+    'pull': {
+        method: ['post', 'options'],
+        action: 'todo/pull.js'
+    },
+    'list/:id': 'list'
 };
